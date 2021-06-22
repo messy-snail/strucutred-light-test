@@ -5,21 +5,28 @@ from _thread import*
 
 import numpy as np
 import cv2
-import sys
+import argparse
 
+# right camera
 cam_serial1 = 14193278
-cam_serial2 = None
+# left camera
+cam_serial2 = 13142459
 
 PATTERN_WIDTH = 1280
 PATTERN_HEIGHT = 800
-CAPTURE_FLAG = False
-CAPTURE_INDEX = 0
+CAPTURE_FLAG1 = False
+# CAPTURE_FLAG2 = False
+CAPTURE_INDEX1 = 0
+CAPTURE_INDEX2 = 0
 # gui = GUI()
 # gui.show_selection()
 
 def cam_thread(id):
-    global CAPTURE_FLAG
-    global CAPTURE_INDEX
+    global CAPTURE_FLAG1
+    # global CAPTURE_FLAG2
+    global CAPTURE_INDEX1
+    # global CAPTURE_INDEX2
+
     if id==0:
         c = Camera(serial=cam_serial1)
     else:
@@ -32,13 +39,25 @@ def cam_thread(id):
         image = c.get_current_image()  # last image
         imageData = np.asarray(image["buffer"], dtype=np.byte)
         cv_image = np.array(image["buffer"], dtype="uint8").reshape((image["rows"], image["cols"]));
-        if CAPTURE_FLAG:
-            ret = cv2.imwrite(f'cam1-{CAPTURE_INDEX}.png', cv_image)
-            if ret:
-                CAPTURE_INDEX += 1
-                CAPTURE_FLAG = False
 
-        cv2.imshow('cam1', cv_image)
+        cv2.imshow(f'cam-{id}', cv_image)
+        cv2.waitKey(10)
+
+
+        if id == 0 and CAPTURE_FLAG1:
+            ret1 = False
+            ret1 = cv2.imwrite(f'right-{CAPTURE_INDEX1}.png', cv_image)
+            if ret1:
+                CAPTURE_FLAG1 = False
+                CAPTURE_INDEX1+=1
+        # elif id==1 and CAPTURE_FLAG2:
+        #     ret2 = False
+        #     ret2 = cv2.imwrite(f'left-{CAPTURE_INDEX1}.png', cv_image)
+        #     if ret2:
+        #         CAPTURE_FLAG2 = False
+        #         CAPTURE_INDEX2 += 1
+
+        cv2.imshow(f'cam-{id}', cv_image)
         cv2.waitKey(10)
 
     c.disconnect()
@@ -46,7 +65,16 @@ def cam_thread(id):
 
 if __name__ == '__main__':
 
+    # parser = argparse.ArgumentParser(description='Light Structure Camera')
+    # parser.add_argument('--mode', type=str, default="run",
+    #                     choices=["run", "calib", "capture"])
+    # args = parser.parse_args()
+
+    # global CAPTURE_FLAG1
+    # global CAPTURE_FLAG2
+
     start_new_thread(cam_thread, (0,))
+    # start_new_thread(cam_thread, (1,))
 
     gray_code_generator = cv2.structured_light.GrayCodePattern_create(PATTERN_WIDTH, PATTERN_HEIGHT)
     _, patter_images = gray_code_generator.generate()
@@ -67,12 +95,14 @@ if __name__ == '__main__':
         cv2.imwrite(f"pattern/pattern-{num}.png", image)
         num+=1
 
-
     for image in patter_images:
         cv2.imshow("Pattern Window", image)
         cv2.waitKey(10)
-        CAPTURE_FLAG = True
-        while CAPTURE_FLAG:
+        CAPTURE_FLAG1 = True
+        # CAPTURE_FLAG2 = True
+        while CAPTURE_FLAG1:
             pass
+        # while CAPTURE_FLAG1 or CAPTURE_FLAG2:
+        #     pass
 
 
