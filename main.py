@@ -5,104 +5,139 @@ from _thread import*
 
 import numpy as np
 import cv2
-import argparse
+import glob
 
-# right camera
-cam_serial1 = 14193278
-# left camera
-cam_serial2 = 13142459
+class main:
+    def __init__(self):
+        self.cam_serial = 0
+        self.capture_name = ''
 
-PATTERN_WIDTH = 1280
-PATTERN_HEIGHT = 800
-CAPTURE_FLAG1 = False
-# CAPTURE_FLAG2 = False
-CAPTURE_INDEX1 = 0
-CAPTURE_INDEX2 = 0
-# gui = GUI()
-# gui.show_selection()
+        self.PATTERN_WIDTH = 1280
+        self.PATTERN_HEIGHT = 800
+        self.CAPTURE_FLAG = False
 
-def cam_thread(id):
-    global CAPTURE_FLAG1
-    # global CAPTURE_FLAG2
-    global CAPTURE_INDEX1
-    # global CAPTURE_INDEX2
+        self.CAPTURE_INDEX = 0
 
-    if id==0:
-        c = Camera(serial=cam_serial1)
-    else:
-        c = Camera(serial=cam_serial2)
-    c.connect()
-    c.start_capture()
+        self.thread_run=False
 
-    while True:
-        c.read_next_image()
-        image = c.get_current_image()  # last image
-        imageData = np.asarray(image["buffer"], dtype=np.byte)
-        cv_image = np.array(image["buffer"], dtype="uint8").reshape((image["rows"], image["cols"]));
-
-        cv2.imshow(f'cam-{id}', cv_image)
-        cv2.waitKey(10)
+    def cam_thread(self, id):
+        print(self.cam_serial)
+        self.capture_name=''
 
 
-        if id == 0 and CAPTURE_FLAG1:
-            ret1 = False
-            ret1 = cv2.imwrite(f'right-{CAPTURE_INDEX1}.png', cv_image)
-            if ret1:
-                CAPTURE_FLAG1 = False
-                CAPTURE_INDEX1+=1
-        # elif id==1 and CAPTURE_FLAG2:
-        #     ret2 = False
-        #     ret2 = cv2.imwrite(f'left-{CAPTURE_INDEX1}.png', cv_image)
-        #     if ret2:
-        #         CAPTURE_FLAG2 = False
-        #         CAPTURE_INDEX2 += 1
+        if self.cam_serial == 13142459:
+            self.capture_name = 'left'
+        else:
+            self.capture_name = 'right'
 
-        cv2.imshow(f'cam-{id}', cv_image)
-        cv2.waitKey(10)
+        if id==0:
+            c = Camera(serial=self.cam_serial)
 
-    c.disconnect()
+        c.connect()
+        c.start_capture()
+
+        while self.thread_run == True:
+            c.read_next_image()
+            image = c.get_current_image()  # last image
+            imageData = np.asarray(image["buffer"], dtype=np.byte)
+            cv_image = np.array(image["buffer"], dtype="uint8").reshape((image["rows"], image["cols"]));
+
+            cv2.imshow(f'cam-{id}', cv_image)
+            cv2.waitKey(10)
+
+            if id == 0 and self.CAPTURE_FLAG:
+                ret1 = False
+                ret1 = cv2.imwrite(f'./captured/{self.capture_name}-{self.CAPTURE_INDEX:02d}.png', cv_image)
+                cv2.waitKey(100)
+                if ret1:
+                    self.CAPTURE_FLAG = False
+                    self.CAPTURE_INDEX+=1
+
+            cv2.imshow(f'cam-{id}', cv_image)
+            cv2.waitKey(10)
+
+        c.disconnect()
+        self.CAPTURE_INDEX = 0
+
+    def cam_capture(self):
+
+        selector = input('카메라 ID: ')
+        if selector == 'l' or selector =='left' or selector =='13142459':
+            self.cam_serial = 13142459
+        elif selector == 'r' or selector =='right' or selector =='14193278':
+            self.cam_serial = 14193278
+        else:
+            print('잘못된 입력입니다')
+            return False
+        self.thread_run = True
+        start_new_thread(self.cam_thread, (0,))
+        gray_code_generator = cv2.structured_light.GrayCodePattern_create(self.PATTERN_WIDTH, self.PATTERN_HEIGHT)
+
+        _, patter_images = gray_code_generator.generate()
+        # white black 뿌림
+        patter_images.append(255 * np.ones((self.PATTERN_HEIGHT, self.PATTERN_WIDTH)))
+        patter_images.append(np.zeros((self.PATTERN_HEIGHT, self.PATTERN_WIDTH)))
+        cv2.namedWindow("Pattern Window", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("Pattern Window", self.PATTERN_WIDTH, self.PATTERN_HEIGHT)
+        cv2.moveWindow("Pattern Window", 1920, 0)
+        cv2.setWindowProperty("Pattern Window", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        print(f'Pattern Size: {len(patter_images)}')
+        num = 0
+        for image in patter_images:
+            cv2.imwrite(f"pattern/pattern-{num}.png", image)
+            num += 1
+
+        for image in patter_images:
+            cv2.imshow("Pattern Window", image)
+            cv2.waitKey(200)
+            self.CAPTURE_FLAG = True
+            # CAPTURE_FLAG2 = True
+            while self.CAPTURE_FLAG:
+                continue
+
+        self.thread_run = False
+        return True
+
+    def structured_light_reconstruction(self):
+        left_img_list = glob.glob('./captured/left-*.png')
+        right_img_list = glob.glob('./captured/right-*.png')
+
+        gray_code_generator = cv2.structured_light.GrayCodePattern_create(self.PATTERN_WIDTH, self.PATTERN_HEIGHT)
+
+        gray_code_generator.setWhiteThreshold(200)
+        gray_code_generator.setBlackThreshold(50)
+
+        print(left_img_list)
+        print(right_img_list)
+
+
+
+
 
 
 if __name__ == '__main__':
 
-    # parser = argparse.ArgumentParser(description='Light Structure Camera')
-    # parser.add_argument('--mode', type=str, default="run",
-    #                     choices=["run", "calib", "capture"])
-    # args = parser.parse_args()
+    main = main()
+    while True:
+        mode = input("1: 캡쳐 모드\n2: 캘리브레이션 모드\n3: 3차원 복원 모드\n4: 종료\n\n모드: ")
+        if mode == '1':
+            ret = main.cam_capture()
+            if ret is False:
+                continue
 
-    # global CAPTURE_FLAG1
-    # global CAPTURE_FLAG2
 
-    start_new_thread(cam_thread, (0,))
-    # start_new_thread(cam_thread, (1,))
+        elif mode == '2':
 
-    gray_code_generator = cv2.structured_light.GrayCodePattern_create(PATTERN_WIDTH, PATTERN_HEIGHT)
-    _, patter_images = gray_code_generator.generate()
-
-    # black white 뿌림
-    patter_images.append(np.zeros((PATTERN_HEIGHT, PATTERN_WIDTH)))
-    patter_images.append(255*np.ones((PATTERN_HEIGHT, PATTERN_WIDTH)))
-    cv2.namedWindow("Pattern Window", cv2.WINDOW_NORMAL);
-    cv2.resizeWindow("Pattern Window", PATTERN_WIDTH, PATTERN_HEIGHT)
-    cv2.moveWindow("Pattern Window", 1920, 0);
-    cv2.setWindowProperty("Pattern Window", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN);
-
-    print(f'Pattern Size: {len(patter_images)}' )
-    # while(True):
-    #     pass
-    num=0
-    for image in patter_images:
-        cv2.imwrite(f"pattern/pattern-{num}.png", image)
-        num+=1
-
-    for image in patter_images:
-        cv2.imshow("Pattern Window", image)
-        cv2.waitKey(10)
-        CAPTURE_FLAG1 = True
-        # CAPTURE_FLAG2 = True
-        while CAPTURE_FLAG1:
             pass
-        # while CAPTURE_FLAG1 or CAPTURE_FLAG2:
-        #     pass
+        elif mode == '3':
+            main.structured_light_reconstruction()
+            pass
+        elif mode == '4':
+            print('종료합니다')
+            break
+        else:
+            print('잘못된 입력입니다')
+            continue
+
 
 
