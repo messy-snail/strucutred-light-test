@@ -1,7 +1,11 @@
 captured
 pattern
 .idea
+*.png
+.vs
+*.pyproj
 5captured
+_captured
 captured2
 captured4
 statue_back_side
