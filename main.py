@@ -8,6 +8,8 @@ from _thread import*
 import numpy as np
 import cv2
 import glob
+import open3d as o3d
+import math
 
 class main:
     def __init__(self):
@@ -15,14 +17,17 @@ class main:
         self.cam_serial2 = 0
         self.capture_name = ''
 
-        # self.PATTERN_WIDTH = 1280
-        # self.PATTERN_HEIGHT = 800
+        self.PATTERN_WIDTH = 1280
+        self.PATTERN_HEIGHT = 800
 
         # self.PATTERN_WIDTH = 640
         # self.PATTERN_HEIGHT = 480
 
-        self.PATTERN_WIDTH = 640
-        self.PATTERN_HEIGHT = 480
+        # self.PATTERN_WIDTH = 8
+        # self.PATTERN_HEIGHT = 8
+
+        self.EXPOSURE_TIME = 500
+
         self.CAPTURE_FLAG = False
 
         self.CAPTURE_INDEX = 0
@@ -38,16 +43,78 @@ class main:
         self.capture_name2 = 'right'
 
         c1 = Camera(serial=self.cam_serial1)
-        c2 = Camera(serial=self.cam_serial2)
+        # c2 = Camera(serial=self.cam_serial2)
+
+        c1.connect()
+
+        # c1.set_cam_setting_option_values('exposure',self.EXPOSURE_TIME)
+        c1.start_capture()
+        print('c1: ',c1.is_color)
+        # c1.set_default_color_processing('NN')
+
+        # c2.connect()
+        # c2.set_cam_setting_option_values('exposure', self.EXPOSURE_TIME)
+        # c2.start_capture()
+        # print('c2: ', c2.is_color())
+        while self.thread_run == True:
+            cv2.waitKey(500)
+            c1.read_next_image()
+            image1 = c1.get_current_image()  # last image
+            imageData1 = np.asarray(image1["buffer"], dtype=np.byte)
+            cv_image1 = np.array(image1["buffer"], dtype="uint8").reshape((image1["rows"], image1["cols"]));
+            cv_image1 = cv2.cvtColor(cv_image1, cv2.COLOR_BayerGB2BGR)
+            cv_image1 = cv2.cvtColor(cv_image1, cv2.COLOR_BGR2GRAY)
+
+            # c2.read_next_image()
+            # image2 = c2.get_current_image()  # last image
+            # imageData2 = np.asarray(image2["buffer"], dtype=np.byte)
+            # cv_image2 = np.array(image2["buffer"], dtype="uint8").reshape((image1["rows"], image1["cols"]));
+
+            cv2.imshow(f'left-{id}', cv_image1)
+            # cv2.imshow(f'right-{id}', cv_image2)
+            cv2.waitKey(10)
+
+            if self.CAPTURE_FLAG:
+                ret1 = False
+                ret1 = cv2.imwrite(f'./captured/{self.capture_name1}-{self.CAPTURE_INDEX:02d}.png', cv_image1)
+                # ret2 = False
+                # ret2 = cv2.imwrite(f'./captured/{self.capture_name2}-{self.CAPTURE_INDEX:02d}.png', cv_image2)
+
+                while True:
+                    if ret1==True:
+                        self.CAPTURE_FLAG = False
+                        self.CAPTURE_INDEX+=1
+                        break
+        c1.disconnect()
+        # c2.disconnect()
+        self.CAPTURE_INDEX = 0
+    def cam_thread2(self, id):
+        self.capture_name1 = 'left'
+        self.capture_name2 = 'right'
+
+        c1 = None
+        c2 = None
+        try:
+            c1 = Camera(serial=self.cam_serial1)
+            c2 = Camera(serial=self.cam_serial2)
+        except Exception as e:
+            print('랜 연결 또는 무선 인터넷 연결 여부를 확인하세요')
+            print(e)
+            return
 
         c1.connect()
         c1.start_capture()
 
+        c1.set_cam_setting_option_values('exposure', self.EXPOSURE_TIME)
+        # print('c1: ', c1.is_color())
+
         c2.connect()
         c2.start_capture()
+        c2.set_cam_setting_option_values('exposure', self.EXPOSURE_TIME)
+        # print('c2: ', c2.is_color())
 
-        while self.thread_run == True:
-            cv2.waitKey(500)
+        while self.thread_run2 == True:
+            cv2.waitKey(100)
             c1.read_next_image()
             image1 = c1.get_current_image()  # last image
             imageData1 = np.asarray(image1["buffer"], dtype=np.byte)
@@ -57,49 +124,6 @@ class main:
             image2 = c2.get_current_image()  # last image
             imageData2 = np.asarray(image2["buffer"], dtype=np.byte)
             cv_image2 = np.array(image2["buffer"], dtype="uint8").reshape((image1["rows"], image1["cols"]));
-
-            cv2.imshow(f'left-{id}', cv_image1)
-            cv2.imshow(f'right-{id}', cv_image2)
-            cv2.waitKey(10)
-
-            if self.CAPTURE_FLAG:
-                ret1 = False
-                ret1 = cv2.imwrite(f'./captured/{self.capture_name1}-{self.CAPTURE_INDEX:02d}.png', cv_image1)
-                ret2 = False
-                ret2 = cv2.imwrite(f'./captured/{self.capture_name2}-{self.CAPTURE_INDEX:02d}.png', cv_image2)
-
-                while True:
-                    if ret1==True and ret2==True:
-                        self.CAPTURE_FLAG = False
-                        self.CAPTURE_INDEX+=1
-                        break
-        c1.disconnect()
-        c2.disconnect()
-        self.CAPTURE_INDEX = 0
-    def cam_thread2(self, id):
-        self.capture_name1 = 'left'
-        self.capture_name2 = 'right'
-
-        c1 = Camera(serial=self.cam_serial1)
-        # c2 = Camera(serial=self.cam_serial2)
-
-        c1.connect()
-        c1.start_capture()
-
-        # c2.connect()
-        # c2.start_capture()
-
-        while self.thread_run2 == True:
-            cv2.waitKey(100)
-            c1.read_next_image()
-            image1 = c1.get_current_image()  # last image
-            imageData1 = np.asarray(image1["buffer"], dtype=np.byte)
-            cv_image1 = np.array(image1["buffer"], dtype="uint8").reshape((image1["rows"], image1["cols"]));
-
-            # c2.read_next_image()
-            # image2 = c2.get_current_image()  # last image
-            # imageData2 = np.asarray(image2["buffer"], dtype=np.byte)
-            # cv_image2 = np.array(image2["buffer"], dtype="uint8").reshape((image1["rows"], image1["cols"]));
 
 
             cv2.namedWindow("left", cv2.WINDOW_NORMAL)
@@ -111,10 +135,10 @@ class main:
             cv2.moveWindow("right", 642, 0)
 
             cv2.imshow('left', cv_image1)
-            # cv2.imshow('right', cv_image2)
+            cv2.imshow('right', cv_image2)
 
         c1.disconnect()
-        # c2.disconnect()
+        c2.disconnect()
         self.CAPTURE_INDEX = 0
 
     def cam_capture(self):
@@ -137,6 +161,7 @@ class main:
         num = 0
         for image in patter_images:
             cv2.imwrite(f"pattern/pattern-{num}.png", image)
+            cv2.imwrite(f"captured/right-{num:02d}.png", image)
             num += 1
 
         for image in patter_images:
@@ -310,7 +335,7 @@ class main:
         print(f'Pattern Size: {len(patter_images)}')
         num = 0
         for image in patter_images:
-            cv2.imwrite(f"pattern/pattern-{num}.png", image)
+            cv2.imwrite(f"gray-row-col/pattern-{num}.png", image)
             num += 1
 
     def cam_test(self):
@@ -332,10 +357,12 @@ class main:
         # white = cv2.imread('./captured/right-40.png', 0)[10:-490, 80:-420]
         # black = cv2.imread('./captured/right-41.png', 0)[10:-490, 80:-420]
 
-        target_img = cv2.imread('./statue_back_side/pattern_cam1_im15.jpg', 0)
-        white = cv2.imread('./statue_back_side/pattern_cam1_im43.jpg', 0)
+        target_img = cv2.imread('./captured/left-5.png', 0)
+        white = cv2.imread('./captured/left-0.png', 0)
         black = cv2.imread('./statue_back_side/pattern_cam1_im44.jpg', 0)
 
+        test_img = target_img - white
+        cv2.normalize(test_img, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
         threshold_val = 120
         diff_val = 0
 
@@ -375,8 +402,13 @@ class main:
     def line_test2(self):
         # left_img_names = glob.glob('./statue_back_side/pattern_cam1_*.jpg')
         # right_img_names = glob.glob('./statue_back_side/pattern_cam2_*.jpg')
+
         left_img_names = glob.glob('./captured/left-*.png')
         right_img_names = glob.glob('./captured/right-*.png')
+
+
+        # left_img_names = glob.glob('./gray-row-col/pattern-*.png')
+        # right_img_names = glob.glob('./gray-row-col/pattern-*.png')
 
         left_imgs=[]
         right_imgs = []
@@ -401,68 +433,43 @@ class main:
 
         diff_val = 10
         black_tol = 20
-        shadow_masks = self.compute_shadow_mask(white_imgs, black_imgs)
+        left_shadow_mask, right_shadow_mask = self.compute_shadow_mask(white_imgs, black_imgs)
+        cv2.imwrite('left_shadow_mask.png', left_shadow_mask)
+        cv2.imwrite('right_shadow_mask.png', right_shadow_mask)
+        # norm_left_shadow_mask = cv2.normalize(left_shadow_mask, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8UC1)
+        # norm_right_shadow_mask = cv2.normalize(right_shadow_mask, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8UC1)
 
-        self.get_projection_pixel(left_imgs)
-        for index in range(0, len(left_imgs)):
-            diff_img = abs(left_imgs[index].astype(np.int)-black_imgs[0].astype(np.int))
-            diff_img2 = abs(left_imgs[index].astype(np.int) - white_imgs[0].astype(np.int))
-            filtered_img = copy.deepcopy(left_imgs[index])
-            filtered_img[np.where(diff_img<diff_val)]=0
+        dec_img1, dec_img2 = self.get_projection_pixel(left_imgs, left_shadow_mask)
+        print('berry_test')
 
-            filtered_img2 = copy.deepcopy(left_imgs[index])
-            filtered_img2[np.where(left_imgs[index] > black_imgs[0] + black_tol)]=255
-            # filtered_img2[np.where(diff_img2 > diff_val)] = 0
-
-            concat_img = cv2.hconcat([cv2.resize(filtered_img,(640,480)), cv2.resize(filtered_img2,(640,480)), cv2.resize(left_imgs[index], (640,480))])
-            _ , bin_img = cv2.threshold(left_imgs[index], threshold_val, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-            diff_norm1 = cv2.normalize(diff_img, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
-            diff_norm2 = cv2.normalize(diff_img2, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
-
-            concat_img2 = cv2.hconcat([cv2.resize(diff_norm1, (640, 480)), cv2.resize(diff_norm2, (640, 480)),
-                                      cv2.resize(left_imgs[index], (640, 480))])
-
-            # thr1 = cv2.adaptiveThreshold(left_imgs[index], 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 2)
-
-            # diff_img3 = np.zeros(left_imgs[index].shape)
-            diff_img3 = np.where(left_imgs[2*index] > left_imgs[2*index+1], 255, 0)
-            diff_img3 = np.where(abs(left_imgs[2 * index] - left_imgs[2 * index + 1])<self.white_threshold, 128, diff_img3)
-
-            diff_norm3 = cv2.normalize(diff_img3, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
-            concat_img3 = cv2.hconcat([cv2.resize(left_imgs[2*index], (640,480)), cv2.resize(left_imgs[2*index+1], (640,480))])
-
-            target_imgs.append(bin_img)
-
-            # print('index: ', index)
-            if index == 3:
-                print('test')
-            target_imgs[index] = cv2.bitwise_and(white_imgs[0], target_imgs[index])
-            # cv2.imshow('target_test', target_imgs[index])
-
-            # cv2.waitKey(1000)
 
 
     def compute_shadow_mask(self, whites, blacks):
         shadow_maks_list = []
         for index in range(0, len(whites)):
             shadow_mask = np.where(abs(whites[index] - blacks[index])>self.black_threshold, 255, 0)
-            shadow_maks_list.append(shadow_mask)
+            shadow_maks_list.append(shadow_mask.astype(np.uint8))
 
         return shadow_maks_list
 
-    def get_projection_pixel(self, pattern_imgs):
+    def get_projection_pixel(self, pattern_imgs, shadow_mask):
         original_imgs = copy.deepcopy(pattern_imgs)
         gray_img_list = []
         gray_for_viz_list = []
         gray_for_viz_color_list = []
-        for index in range(0, int(len(pattern_imgs)/2)):
+
+        col_imgs = math.ceil(math.log(self.PATTERN_WIDTH) / math.log(2))
+        row_imgs = math.ceil(math.log(self.PATTERN_HEIGHT) / math.log(2))
+
+        for index in range(0, col_imgs+row_imgs):
             even_img = original_imgs[index*2]
             odd_img = original_imgs[index * 2+1]
-            img = np.where(even_img > odd_img, 1, 0)
+            img = np.where((shadow_mask ==255) & (even_img > odd_img), 255, 0)
 
             #-1=error
-            img = np.where(abs(even_img-odd_img)< self.white_threshold, -1, img)
+            img = np.where((shadow_mask ==255) & (abs(even_img-odd_img)< self.white_threshold), 0, img)
+            #-2=shadow인 곳
+            img = np.where(shadow_mask == 0, 0, img)
 
             norm_img = cv2.normalize(img, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
             color_img = cv2.applyColorMap(norm_img, cv2.COLORMAP_JET)
@@ -470,8 +477,17 @@ class main:
             gray_for_viz_color_list.append(color_img)
             gray_img_list.append(img)
 
-        dec_img = self.gray_to_deciaml_num(gray_img_list)
-        return dec_img
+        number = 0
+        for color in gray_for_viz_color_list:
+            cv2.imwrite(f'./color_img/{number:03d}.png', color)
+            number+=1
+        number=0
+        for gray in gray_for_viz_list:
+            cv2.imwrite(f'./gray_img/{number:03d}.png', gray)
+            number+=1
+        dec_img1 = self.gray_to_deciaml_num(gray_img_list[:col_imgs])
+        dec_img2 = self.gray_to_deciaml_num(gray_img_list[col_imgs:])
+        return dec_img1, dec_img2
 
     def gray_to_deciaml_num(self, gray_img_list):
         dec = np.zeros(gray_img_list[0].shape)
@@ -499,7 +515,31 @@ if __name__ == '__main__':
 
     main = main()
     mode = 0
-    # main.line_test2()
+    # # main.line_test2()
+    #
+    # c1 = Camera(serial=13142459)
+    # c1.connect()
+    #
+    # c1.start_capture()
+    # print('c1: ', c1.is_color)
+    #
+    # while True:
+    #     cv2.waitKey(500)
+    #     c1.read_next_image()
+    #
+    #     image1 = c1.get_current_image()  # last image
+    #     imageData1 = np.asarray(image1["buffer"], dtype=np.byte)
+    #     rows = image1["rows"]
+    #     cols = image1["cols"]
+    #     cv_image1 = np.array(image1["buffer"], dtype="uint8").reshape((image1["rows"], image1["cols"]))
+    #
+    #     rowBytes = image1["received_size"] / image1["rows"]
+    #     test_img = cv2.UMat(rows, cols, cv2.CV_8UC3, np.array(image1["buffer"], dtype="uint8"),rowBytes )
+    #
+    #     print(rows)
+    #     # cvImage = cv::Mat(cf2Img.GetRows(), cf2Img.GetCols(), CV_8UC3, cf2Img.GetData(), rowBytes);
+    #
+
 
     while True:
         mode = 0
