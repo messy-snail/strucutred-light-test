@@ -4,13 +4,11 @@ import cv2
 import numpy as np
 # width = 1024
 # width = 512
-# width = 1280
-# height = 800
-width = 8
-height = 8
+width = 1920
+height = 1080
 
 
-pattern_name = 'gray'
+pattern_name = 'b'
 
 if not os.path.isdir(pattern_name):
     os.mkdir(pattern_name)
@@ -27,11 +25,17 @@ if pattern_name == 'binary' or pattern_name == 'bin'or pattern_name == 'b':
     cv2.moveWindow("Pattern Window", 1920, 0)
     cv2.setWindowProperty("Pattern Window", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    for img in imlist:
-        cv2.imshow("Pattern Window", img)
+    for index in range(len(imlist)-3, len(imlist)):
+        cv2.imshow("Pattern Window", imlist[index])
         cv2.waitKey(-1)
-        cv2.imwrite(f'./{pattern_name}/{index:03d}-pattern.png', img)
-        index+=1
+        # cv2.imwrite(f'./{pattern_name}/{index:03d}-pattern.png', imlist[index])
+        # index+=1
+
+    # for img in imlist:
+    #     cv2.imshow("Pattern Window", img)
+    #     cv2.waitKey(-1)
+    #     cv2.imwrite(f'./{pattern_name}/{index:03d}-pattern.png', img)
+    #     index+=1
 
     img_index = binary.decode(imlist, thresh=127)
 

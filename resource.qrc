@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>ICON/robotics-ci-2.png</file>
+    <file>ICON/robotics-ci-1.png</file>
+  </qresource>
+</RCC>

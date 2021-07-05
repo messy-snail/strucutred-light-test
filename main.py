@@ -143,8 +143,8 @@ class main:
 
     def cam_capture(self):
 
-        self.cam_serial1 = 13142459
-        self.cam_serial2 = 14193278
+        self.cam_serial1 = 14193278
+        # self.cam_serial2 = 14193278
         self.thread_run = True
         start_new_thread(self.cam_thread, (0,))
         gray_code_generator = cv2.structured_light.GrayCodePattern_create(self.PATTERN_WIDTH, self.PATTERN_HEIGHT)
@@ -464,11 +464,15 @@ class main:
         for index in range(0, col_imgs+row_imgs):
             even_img = original_imgs[index*2]
             odd_img = original_imgs[index * 2+1]
-            img = np.where((shadow_mask ==255) & (even_img > odd_img), 255, 0)
+            # 원본값
+            # img = np.where((shadow_mask ==255) & (even_img > odd_img), 1, 0)
+            # #-1=error
+            # img = np.where((shadow_mask ==255) & (abs(even_img-odd_img)< self.white_threshold), -1, img)
+            # #-2=shadow인 곳
+            # img = np.where(shadow_mask == 0, -2, img)
 
-            #-1=error
+            img = np.where((shadow_mask ==255) & (even_img > odd_img), 255, 0)
             img = np.where((shadow_mask ==255) & (abs(even_img-odd_img)< self.white_threshold), 0, img)
-            #-2=shadow인 곳
             img = np.where(shadow_mask == 0, 0, img)
 
             norm_img = cv2.normalize(img, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
