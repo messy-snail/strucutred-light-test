@@ -7,7 +7,9 @@ import common as com
 
 class structured_light_system:
     def __init__(self):
-        self.black_threshold = 40
+        # self.black_threshold = 40
+        self.black_threshold = 20
+        # self.black_threshold = 50
         self.white_threshold = 5
 
     def line_extarct(self):
@@ -41,17 +43,26 @@ class structured_light_system:
             even_img = original_imgs[index*2]
             odd_img = original_imgs[index * 2+1]
             img = np.where((shadow_mask ==255) & (even_img > odd_img), 1, 0)
+            img2 = np.where((shadow_mask == 255) & (even_img > odd_img), 255, 0)
 
             #-1=error
             img = np.where((shadow_mask ==255) & (abs(even_img-odd_img)< self.white_threshold), -1, img)
+            img2 = np.where((shadow_mask ==255) & (abs(even_img-odd_img)< self.white_threshold), 0, img2)
             #-2=shadow인 곳
             img = np.where(shadow_mask == 0, -2, img)
+            img2 = np.where(shadow_mask == 0, 20, img2)
 
             norm_img = cv2.normalize(img, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
             color_img = cv2.applyColorMap(norm_img, cv2.COLORMAP_JET)
-            gray_for_viz_list.append(norm_img)
+
+            # gray_for_viz_list.append(norm_img)
+            img2_color = cv2.cvtColor(img2.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+            img2_color[np.where(img2==20)] = (0,0,255)
+            gray_for_viz_list.append(img2)
             gray_for_viz_color_list.append(color_img)
             gray_img_list.append(img)
+            if index==17:
+                print(index)
 
         number = 0
         for color in gray_for_viz_color_list:

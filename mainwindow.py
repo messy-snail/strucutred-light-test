@@ -40,15 +40,23 @@ class MyWindow(QMainWindow, form_class):
 
         ## Slots
         self.BTN_CAM_OPEN.clicked.connect(self.btn_cam_oepn_clicked)
-        self.BTN_GENERATE_PATTERN.clicked.connect(self.btn_generate_patter_clicked)
+        self.BTN_GENERATE_PATTERN.clicked.connect(self.btn_generate_pattern_clicked)
         self.BTN_AUTO_CAPTURE.clicked.connect(self.btn_auto_capture_clicked)
         self.BTN_MANUAL_CAPTURE.clicked.connect(self.btn_manual_capture_clicked)
         self.BTN_EXTRACT_STRIPE.clicked.connect(self.btn_extract_stripe_clicked)
         self.BTN_EXIT.clicked.connect(self.btn_exit_clicked)
         self.BTN_PREV_IMAGE.clicked.connect(self.btn_prev_image_clicked)
         self.BTN_NEXT_IMAGE.clicked.connect(self.btn_next_image_clicked)
+
         self.BTN_OPEN_CAPTURE_IMAGE.clicked.connect(self.btn_open_capture_image_clicked)
         self.BTN_OPEN_EXTRACTED_IMAGE.clicked.connect(self.btn_open_extracted_image_clicked)
+        self.BTN_OPEN_GRAY_CODE.clicked.connect(self.btn_open_gray_code_clicked)
+        self.BTN_OPEN_BINARY_CODE.clicked.connect(self.btn_open_binary_code_clicked)
+
+        self.BTN_CALIBRATION.clicked.connect(self.btn_calibration_clicked)
+
+        self.RB_GRAY_CODE.clicked.connect(self.radio_clicked)
+        self.RB_BINARY_CODE.clicked.connect(self.radio_clicked)
 
         # 전체화면
         self.shortcutFull = QShortcut(self)
@@ -83,10 +91,14 @@ class MyWindow(QMainWindow, form_class):
             return
         com.log.print_log("카메라 열기", self.TE_LOG)
 
-    def btn_generate_patter_clicked(self):
+    def btn_generate_pattern_clicked(self):
+        com.PATTERN_WIDTH =  int(self.LE_PATTERN_WIDTH.text())
+        com.PATTERN_HEIGHT =  int(self.LE_PATTERN_HEIGHT.text())
+        com.log.print_log(f'가로: {com.PATTERN_WIDTH}, 세로: {com.PATTERN_HEIGHT}의 패턴을 생성합니다', com.TE_LOG)
         com.pm.start()
+
         ret = start_new_thread(com.pm.label_thread, (0,))
-        print('end')
+        # com.log.print_log('생성을 완료했습니다', com.TE_LOG)
 
         # thread = threading.Thread(target=self.pm.label_thread, args=(1, ))
         # thread.start()
@@ -101,7 +113,7 @@ class MyWindow(QMainWindow, form_class):
         if not os.path.exists('manual'):
             os.mkdir('manual')
         cv2.imwrite(f'manual/{date}.png', self.cm.cv_image1)
-        com.log.print_log(self.TE_LOG, '캡쳐되었습니다')
+        com.log.print_log('캡쳐되었습니다', self.TE_LOG)
 
     def btn_extract_stripe_clicked(self):
         self.sls.line_extarct()
@@ -118,7 +130,7 @@ class MyWindow(QMainWindow, form_class):
 
     def btn_next_image_clicked(self):
         self.current_index+=1
-        if self.current_index>self.total_index:
+        if self.current_index>=self.total_index:
             self.current_index = self.total_index
         self.change_view()
 
@@ -131,16 +143,32 @@ class MyWindow(QMainWindow, form_class):
         self.current_index = 0
         left_imgs, right_imgs, white_imgs, black_imgs =com.read_captured_imgs()
         self.total_imgs = left_imgs + right_imgs + white_imgs + black_imgs
-        self.total_index = len(self.total_imgs)
+        self.total_index = len(self.total_imgs)-1
         self.LB_TOTAL_INDEX.setNum(self.total_index)
         self.change_view()
 
     def btn_open_extracted_image_clicked(self):
         self.total_imgs = []
         self.total_imgs = com.read_extracted_imgs()
-        self.total_index = len(self.total_imgs)
+        self.total_index = len(self.total_imgs)-1
         self.LB_TOTAL_INDEX.setNum(self.total_index)
         self.change_view()
+
+    def btn_open_gray_code_clicked(self):
+        pass
+    def btn_open_binary_code_clicked(self):
+        pass
+
+    def btn_calibration_clicked(self):
+        pass
+
+    def radio_clicked(self):
+        if self.RB_GRAY_CODE.isChecked():
+            com.pm.OPTION = 'g'
+            com.log.print_log('그레이 코드', com.TE_LOG, 'yellow')
+        elif self.RB_BINARY_CODE.isChecked():
+            com.pm.OPTION = 'b'
+            com.log.print_log('바이너리 코드', com.TE_LOG, 'yellow')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

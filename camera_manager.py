@@ -16,7 +16,7 @@ class camera_manager:
         # self.CAM_SERIAL = 13142459
         self.CAM_SERIAL = 14193278
         self.THREAD_RUN = False
-        self.EXPOSURE_TIME = 500
+        self.EXPOSURE_TIME = 50
 
         self.camera_instance = None
 
@@ -40,7 +40,7 @@ class camera_manager:
                 # self.pm.CAPTURE_FLAG = True
                 for index in range(0, len(com.pm.patter_images)):
                     com.pm.next_pattern(index)
-                    cv2.waitKey(250)
+                    cv2.waitKey(450)
                     self.camera_instance.read_next_image()
                     image1 = self.camera_instance.get_current_image()  # last image
                     image_data1 = np.asarray(image1["buffer"], dtype=np.uint8)
@@ -49,7 +49,7 @@ class camera_manager:
                     cv2.imwrite(f'./captured/{self.capture_name}-{index:02d}.png', self.cv_image1)
                     com.lm.view_original_image(com.LABEL_ORIGINAL, self.cv_image1, True)
                     com.log.print_log(f'{index:02d}번째 사진이 캡쳐되었습니다', com.TE_LOG)
-
+                com.pm.destroy_pattern_window()
                     # self.pm.CAPTURE_DONE = True
                 self.CAPTURE_FLAG = False
 

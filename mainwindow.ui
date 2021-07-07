@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1880</width>
+    <width>1890</width>
     <height>848</height>
    </rect>
   </property>
@@ -23,6 +23,11 @@ font: bold 10pt &quot;Noto Sans KR&quot;;
 color:white;
 }
 QLineEdit{
+font: bold 10pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+
+QRadioButton{
 font: bold 10pt &quot;Noto Sans KR&quot;;
 color:white;
 }
@@ -469,6 +474,96 @@ background-color:rgba(88, 197, 228,150);
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="BTN_OPEN_GRAY_CODE">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>380</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:rgb(48, 157, 148);
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(88, 197, 228,100);
+}
+QPushButton:pressed{
+background-color:rgba(88, 197, 228,150);
+}</string>
+            </property>
+            <property name="text">
+             <string>GRAY CODE</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="BTN_OPEN_BINARY_CODE">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>380</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:rgb(48, 157, 148);
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(88, 197, 228,100);
+}
+QPushButton:pressed{
+background-color:rgba(88, 197, 228,150);
+}</string>
+            </property>
+            <property name="text">
+             <string>BINARY CODE</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QFrame" name="horizontalFrame">
           <property name="styleSheet">
            <string notr="true">QFrame{
@@ -553,106 +648,17 @@ color:white;
         <property name="spacing">
          <number>10</number>
         </property>
-        <item row="0" column="0">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>15</width>
-            <height>17</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="6" column="2">
-         <widget class="QPushButton" name="BTN_EXTRACT_STRIPE">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-background-color:rgb(48, 157, 148);
-
-border-radius:5px;
-font: bold 12pt &quot;Noto Sans KR&quot;;
-color:white;
-}
-QPushButton:hover{
-background-color:rgba(88, 197, 228,100);
-}
-QPushButton:pressed{
-background-color:rgba(88, 197, 228,150);
-}</string>
-          </property>
-          <property name="text">
-           <string>패턴 추출</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QPushButton" name="BTN_AUTO_CAPTURE">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-background-color:rgb(37, 85, 158);
-
-
-border-radius:5px;
-font: bold 12pt &quot;Noto Sans KR&quot;;
-color:white;
-}
-QPushButton:hover{
-background-color:rgba(77, 125, 198,100);
-}
-QPushButton:pressed{
-background-color:rgba(77, 125, 198,150);
-}
-QPushButton:disabled{
-background-color:rgba(121, 106, 122,90);
-color:gray;
-}</string>
-          </property>
-          <property name="text">
-           <string>자동 캡쳐</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="2">
          <widget class="QPushButton" name="BTN_MANUAL_CAPTURE">
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
@@ -681,17 +687,161 @@ color:gray;
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
-         <widget class="QPushButton" name="BTN_GENERATE_PATTERN">
+        <item row="10" column="2">
+         <widget class="QPushButton" name="BTN_EXIT">
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:#FA4F41;
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(250, 155, 155,100);
+
+}
+QPushButton:pressed{
+background-color:rgba(250, 155, 155,150);
+
+}</string>
+          </property>
+          <property name="text">
+           <string>종료</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="2" column="2">
+           <widget class="QRadioButton" name="RB_BINARY_CODE">
+            <property name="text">
+             <string>B</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="LE_PATTERN_WIDTH">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>640</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>27</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>27</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>세로:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="LE_PATTERN_HEIGHT">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>480</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>27</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>27</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>가로:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="RB_GRAY_CODE">
+            <property name="text">
+             <string>G</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="7" column="0">
+         <widget class="QPushButton" name="BTN_AUTO_CAPTURE">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
@@ -716,7 +866,74 @@ color:gray;
 }</string>
           </property>
           <property name="text">
-           <string>패턴 생성</string>
+           <string>자동 캡쳐</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <spacer name="verticalSpacer_3">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>50</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="8" column="0">
+         <widget class="QPushButton" name="BTN_CALIBRATION">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(37, 85, 158);
+
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(77, 125, 198,100);
+}
+QPushButton:pressed{
+background-color:rgba(77, 125, 198,150);
+}
+QPushButton:disabled{
+background-color:rgba(121, 106, 122,90);
+color:gray;
+}</string>
+          </property>
+          <property name="text">
+           <string>캘리브레이션</string>
           </property>
          </widget>
         </item>
@@ -724,13 +941,13 @@ color:gray;
          <widget class="QPushButton" name="BTN_CAM_OPEN">
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
@@ -759,158 +976,92 @@ color:gray;
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>35</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>35</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>세로:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>35</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>35</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>가로:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="LE_PATTERN_WIDTH">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>1280</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="LE_PATTERN_HEIGHT">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>800</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="8" column="0">
-         <spacer name="verticalSpacer_3">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
+        <item row="0" column="0">
+         <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
+           <enum>QSizePolicy::Fixed</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>20</width>
-            <height>50</height>
+            <width>15</width>
+            <height>17</height>
            </size>
           </property>
          </spacer>
         </item>
-        <item row="9" column="2">
-         <widget class="QPushButton" name="BTN_EXIT">
+        <item row="7" column="2">
+         <widget class="QPushButton" name="BTN_EXTRACT_STRIPE">
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>150</width>
+            <width>170</width>
             <height>50</height>
            </size>
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
-background-color:#FA4F41;
+background-color:rgb(48, 157, 148);
+
 border-radius:5px;
 font: bold 12pt &quot;Noto Sans KR&quot;;
 color:white;
 }
 QPushButton:hover{
-background-color:rgba(250, 155, 155,100);
-
+background-color:rgba(88, 197, 228,100);
 }
 QPushButton:pressed{
-background-color:rgba(250, 155, 155,150);
-
+background-color:rgba(88, 197, 228,150);
 }</string>
           </property>
           <property name="text">
-           <string>종료</string>
+           <string>패턴 추출</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="BTN_GENERATE_PATTERN">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(37, 85, 158);
+
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(77, 125, 198,100);
+}
+QPushButton:pressed{
+background-color:rgba(77, 125, 198,150);
+}
+QPushButton:disabled{
+background-color:rgba(121, 106, 122,90);
+color:gray;
+}</string>
+          </property>
+          <property name="text">
+           <string>패턴 생성</string>
           </property>
          </widget>
         </item>
@@ -935,17 +1086,18 @@ background-color:rgba(250, 155, 155,150);
   </widget>
  </widget>
  <tabstops>
-  <tabstop>BTN_CAM_OPEN</tabstop>
-  <tabstop>LE_PATTERN_HEIGHT</tabstop>
   <tabstop>LE_PATTERN_WIDTH</tabstop>
+  <tabstop>LE_PATTERN_HEIGHT</tabstop>
+  <tabstop>BTN_CAM_OPEN</tabstop>
   <tabstop>BTN_GENERATE_PATTERN</tabstop>
   <tabstop>BTN_AUTO_CAPTURE</tabstop>
   <tabstop>BTN_EXTRACT_STRIPE</tabstop>
   <tabstop>BTN_MANUAL_CAPTURE</tabstop>
   <tabstop>BTN_NEXT_IMAGE</tabstop>
   <tabstop>BTN_EXIT</tabstop>
-  <tabstop>TE_LOG</tabstop>
   <tabstop>BTN_PREV_IMAGE</tabstop>
+  <tabstop>BTN_OPEN_CAPTURE_IMAGE</tabstop>
+  <tabstop>BTN_OPEN_EXTRACTED_IMAGE</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>

@@ -6,8 +6,8 @@ import label_manager
 import pattern_manager
 
 
-PATTERN_WIDTH = 1280
-PATTERN_HEIGHT = 800
+PATTERN_WIDTH = 640
+PATTERN_HEIGHT = 480
 
 log = log_manager.log_manager()
 lm = label_manager.label_manager()
@@ -27,6 +27,9 @@ def read_captured_imgs():
     left_img_names = glob.glob('./captured/left-*.png')
     right_img_names = glob.glob('./captured/right-*.png')
 
+    # left_img_names = glob.glob('./captured/pattern_cam1_*.jpg')
+    # right_img_names = glob.glob('./captured/pattern_cam2_*.jpg')
+
     for index in range(0, len(left_img_names)):
         # cv2.remap
         if index < len(left_img_names) - 2:
@@ -43,10 +46,17 @@ def read_captured_imgs():
 
 def read_extracted_imgs():
     imgs = []
-    img_names = glob.glob('./color_img/*.png')
-
+    img_names = glob.glob('./gray_img/*.png')
     for index in range(0, len(img_names)):
         imgs.append(cv2.imread(img_names[index]))
     return imgs
+
+def read_chessboard_imgs():
+    imgs = []
+    img_names = glob.glob('./chessboard/*.png')
+    for index in range(0, len(img_names)):
+        imgs.append(cv2.imread(img_names[index]))
+    return imgs
+
 # PATTERN_WIDTH = 1920
 # PATTERN_HEIGHT = 1080
