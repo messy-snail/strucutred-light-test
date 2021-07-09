@@ -87,14 +87,27 @@ def detect_aruco(img_list):
 
         print('pass')
     # # calibrate projector
-    # print("calibrate projector")
-    # print("proj calib mat before\n%s" % K_proj)
-    # ret, K_proj, dist_coef_proj, rvecs, tvecs = cv2.calibrateCamera(objectPointsAccum,
-    #                                                                 projCirclePoints,
-    #                                                                 (w_proj, h_proj),
-    #                                                                 K_proj,
-    #                                                                 dist_coef_proj,
-    #                                                                 flags=cv2.CALIB_USE_INTRINSIC_GUESS)
+    w_proj = 1280
+    h_proj = 800
+
+    K_proj = np.array([[1000., 0., w_proj / 2.],
+                                 [0., 1000., h_proj / 2.],
+                                 [0., 0., 1.]])
+
+    dist_coef_proj = np.zeros((5, 1))
+
+    print("calibrate projector")
+    print("proj calib mat before\n%s" % K_proj)
+
+    #objectPointsAccum: 실제 원 크기
+    #projCirclePoints 찾은 값
+
+    ret, K_proj, dist_coef_proj, rvecs, tvecs = cv2.calibrateCamera(objectPointsAccum,
+                                                                    projCirclePoints,
+                                                                    (w_proj, h_proj),
+                                                                    K_proj,
+                                                                    dist_coef_proj,
+                                                                    flags=cv2.CALIB_USE_INTRINSIC_GUESS)
     # print("proj calib mat after\n%s" % K_proj)
     # print("proj dist_coef %s" % dist_coef_proj.T)
     # print("calibration reproj err %s" % ret)
