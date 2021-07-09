@@ -58,7 +58,6 @@ for images_l, images_r in pair_images:
     corners_R, ids_R, rejected_R = cv2.aruco.detectMarkers(grayR, aruco_dict, parameters=arucoParams)
     resp_R, charuco_corners_R, charucos_ids_R = cv2.aruco.interpolateCornersCharuco(corners_R, ids_R, grayR, board)
 
-
     objpoints_L, imgpoints_L = cv2.aruco.getBoardObjectAndImagePoints(board, charuco_corners_L, charucos_ids_L)
     objpoints_R, imgpoints_R = cv2.aruco.getBoardObjectAndImagePoints(board, charuco_corners_R, charucos_ids_R)
 

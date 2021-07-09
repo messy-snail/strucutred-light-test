@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1890</width>
-    <height>848</height>
+    <width>1930</width>
+    <height>864</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -648,6 +648,197 @@ color:white;
         <property name="spacing">
          <number>10</number>
         </property>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="BTN_CAM_OPEN">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(37, 85, 158);
+
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(77, 125, 198,100);
+}
+QPushButton:pressed{
+background-color:rgba(77, 125, 198,150);
+}
+QPushButton:disabled{
+background-color:rgba(121, 106, 122,90);
+color:gray;
+}</string>
+          </property>
+          <property name="text">
+           <string>카메라 열기</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QPushButton" name="BTN_CALIBRATION">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(37, 85, 158);
+
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(77, 125, 198,100);
+}
+QPushButton:pressed{
+background-color:rgba(77, 125, 198,150);
+}
+QPushButton:disabled{
+background-color:rgba(121, 106, 122,90);
+color:gray;
+}</string>
+          </property>
+          <property name="text">
+           <string>캘리브레이션</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0">
+         <spacer name="verticalSpacer_3">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>50</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="12" column="2">
+         <widget class="QPushButton" name="BTN_EXIT">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:#FA4F41;
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(250, 155, 155,100);
+
+}
+QPushButton:pressed{
+background-color:rgba(250, 155, 155,150);
+
+}</string>
+          </property>
+          <property name="text">
+           <string>종료</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>15</width>
+            <height>17</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="7" column="2">
+         <widget class="QPushButton" name="BTN_EXTRACT_STRIPE">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(48, 157, 148);
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(88, 197, 228,100);
+}
+QPushButton:pressed{
+background-color:rgba(88, 197, 228,150);
+}</string>
+          </property>
+          <property name="text">
+           <string>패턴 추출</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="2">
          <widget class="QPushButton" name="BTN_MANUAL_CAPTURE">
           <property name="minimumSize">
@@ -684,41 +875,6 @@ color:gray;
           </property>
           <property name="text">
            <string>수동 캡쳐</string>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="2">
-         <widget class="QPushButton" name="BTN_EXIT">
-          <property name="minimumSize">
-           <size>
-            <width>170</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>170</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-background-color:#FA4F41;
-border-radius:5px;
-font: bold 12pt &quot;Noto Sans KR&quot;;
-color:white;
-}
-QPushButton:hover{
-background-color:rgba(250, 155, 155,100);
-
-}
-QPushButton:pressed{
-background-color:rgba(250, 155, 155,150);
-
-}</string>
-          </property>
-          <property name="text">
-           <string>종료</string>
           </property>
          </widget>
         </item>
@@ -831,6 +987,45 @@ background-color:rgba(250, 155, 155,150);
           </item>
          </layout>
         </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="BTN_GENERATE_PATTERN">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(37, 85, 158);
+
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(77, 125, 198,100);
+}
+QPushButton:pressed{
+background-color:rgba(77, 125, 198,150);
+}
+QPushButton:disabled{
+background-color:rgba(121, 106, 122,90);
+color:gray;
+}</string>
+          </property>
+          <property name="text">
+           <string>패턴 생성</string>
+          </property>
+         </widget>
+        </item>
         <item row="7" column="0">
          <widget class="QPushButton" name="BTN_AUTO_CAPTURE">
           <property name="minimumSize">
@@ -871,35 +1066,7 @@ color:gray;
          </widget>
         </item>
         <item row="9" column="0">
-         <spacer name="verticalSpacer_3">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>50</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="8" column="0">
-         <widget class="QPushButton" name="BTN_CALIBRATION">
+         <widget class="QPushButton" name="BTN_CIRCLE_PATTERN">
           <property name="minimumSize">
            <size>
             <width>170</width>
@@ -933,12 +1100,12 @@ color:gray;
 }</string>
           </property>
           <property name="text">
-           <string>캘리브레이션</string>
+           <string>원 패턴 생성</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="BTN_CAM_OPEN">
+        <item row="9" column="2">
+         <widget class="QPushButton" name="BTN_ARUCO_PATTERN">
           <property name="minimumSize">
            <size>
             <width>170</width>
@@ -972,62 +1139,12 @@ color:gray;
 }</string>
           </property>
           <property name="text">
-           <string>카메라 열기</string>
+           <string>아루코 패턴 생성</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>15</width>
-            <height>17</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="7" column="2">
-         <widget class="QPushButton" name="BTN_EXTRACT_STRIPE">
-          <property name="minimumSize">
-           <size>
-            <width>170</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>170</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-background-color:rgb(48, 157, 148);
-
-border-radius:5px;
-font: bold 12pt &quot;Noto Sans KR&quot;;
-color:white;
-}
-QPushButton:hover{
-background-color:rgba(88, 197, 228,100);
-}
-QPushButton:pressed{
-background-color:rgba(88, 197, 228,150);
-}</string>
-          </property>
-          <property name="text">
-           <string>패턴 추출</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QPushButton" name="BTN_GENERATE_PATTERN">
+        <item row="10" column="0">
+         <widget class="QPushButton" name="BTN_TEST">
           <property name="minimumSize">
            <size>
             <width>170</width>
@@ -1061,7 +1178,7 @@ color:gray;
 }</string>
           </property>
           <property name="text">
-           <string>패턴 생성</string>
+           <string>테스트</string>
           </property>
          </widget>
         </item>

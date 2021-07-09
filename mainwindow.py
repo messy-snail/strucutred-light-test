@@ -1,3 +1,5 @@
+import glob
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -15,6 +17,8 @@ import camera_manager
 import pattern_manager
 import structured_light_system
 import common as com
+import circle_pattern
+import aruco_test
 
 from _thread import*
 
@@ -52,8 +56,11 @@ class MyWindow(QMainWindow, form_class):
         self.BTN_OPEN_EXTRACTED_IMAGE.clicked.connect(self.btn_open_extracted_image_clicked)
         self.BTN_OPEN_GRAY_CODE.clicked.connect(self.btn_open_gray_code_clicked)
         self.BTN_OPEN_BINARY_CODE.clicked.connect(self.btn_open_binary_code_clicked)
+        self.BTN_CIRCLE_PATTERN.clicked.connect(self.btn_circle_pattern_clicked)
+        self.BTN_TEST.clicked.connect(self.btn_test_clicked)
 
         self.BTN_CALIBRATION.clicked.connect(self.btn_calibration_clicked)
+
 
         self.RB_GRAY_CODE.clicked.connect(self.radio_clicked)
         self.RB_BINARY_CODE.clicked.connect(self.radio_clicked)
@@ -71,7 +78,7 @@ class MyWindow(QMainWindow, form_class):
         self.shortcutQuit.activated.connect(self.close)
 
         self.btn_cam_oepn_clicked()
-        self.toggle_full_screen()
+        # self.toggle_full_screen()
 
 
     ###소멸자
@@ -155,11 +162,43 @@ class MyWindow(QMainWindow, form_class):
         self.change_view()
 
     def btn_open_gray_code_clicked(self):
-        pass
+        self.total_imgs = []
+        self.current_index = 0
+        self.total_imgs = com.read_gray_imgs()
+        self.total_index = len(self.total_imgs) - 1
+        self.LB_TOTAL_INDEX.setNum(self.total_index)
+        self.change_view()
     def btn_open_binary_code_clicked(self):
+        self.total_imgs = []
+        self.current_index = 0
+        self.total_imgs = com.read_binary_imgs()
+        self.total_index = len(self.total_imgs) - 1
+        self.LB_TOTAL_INDEX.setNum(self.total_index)
+        self.change_view()
+
+    def btn_circle_pattern_clicked(self):
+        circle_pattern.generate(4, 5, radius = 20, offset= 80, margin_x=300, margin_y=300)
         pass
 
+    def btn_test_clicked(self):
+        img_name_list = glob.glob('./calibration/*.png')
+        img_list = []
+        for name in img_name_list:
+            img_list.append(cv2.imread(name))
+
+        aruco_test.detect_aruco(img_list)
+        # self.cm.ARUCO_FLAG =not self.cm.ARUCO_FLAG
+        # aruco_test.detect_aruco(cv2.imread('capture.png'))
+        # aruco_test.detect_aruco(cv2.imread('cicle_pattern.png'))
+        pass
     def btn_calibration_clicked(self):
+        img_name_list = glob.glob('./charuco/*.png')
+        img_list = []
+        for name in img_name_list:
+            img_list.append(cv2.imread(name))
+
+        aruco_test.calibrate_camera(img_list)
+
         pass
 
     def radio_clicked(self):

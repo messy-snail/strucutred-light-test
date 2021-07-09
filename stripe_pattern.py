@@ -17,27 +17,29 @@ def generate(dsize, option):
                                           dtype=int).astype(np.uint8)
         imgs_code_horizontal = 255 * np.fromfunction(lambda y, x, n: (y & (1 << (height_num - 1 - n)) != 0), (height, width, height_num),
                                           dtype=int).astype(np.uint8)
-
     elif option == 'g':
         print('그레이로 생성')
         imgs_code_vertical = 255 * np.fromfunction(lambda y, x, n: ((x ^ (x >> 1)) & (1 << (width_num - 1 - n)) != 0),
                                                    (height, width, width_num), dtype=int).astype(np.uint8)
-
         imgs_code_horizontal = 255 * np.fromfunction(
             lambda y, x, n: ((y ^ (y >> 1)) & (1 << (height_num - 1 - n)) != 0),
             (height, width, height_num), dtype=int).astype(np.uint8)
 
+    elif option =='t':
+        print('라인코드로 생성')
+
     img_vertical_list = split(imgs_code_vertical)
+    img_horizontal_list = split(imgs_code_horizontal)
 
     img_final_list = []
     for img in img_vertical_list:
         img_final_list.append(img)
         img = np.where(img==255, 0, 255)
-        img_final_list.append(img)
+        img_final_list.append(img.astype(np.uint8))
 
-    for img in imgs_code_horizontal:
+    for img in img_horizontal_list:
         img_final_list.append(img)
         img = np.where(img==255, 0, 255)
-        img_final_list.append(img)
+        img_final_list.append(img.astype(np.uint8))
 
     return img_final_list

@@ -51,6 +51,20 @@ def read_extracted_imgs():
         imgs.append(cv2.imread(img_names[index]))
     return imgs
 
+def read_gray_imgs():
+    imgs = []
+    img_names = glob.glob('./gray/*.png')
+    for index in range(0, len(img_names)):
+        imgs.append(cv2.imread(img_names[index]))
+    return imgs
+
+def read_binary_imgs():
+    imgs = []
+    img_names = glob.glob('./binary/*.png')
+    for index in range(0, len(img_names)):
+        imgs.append(cv2.imread(img_names[index]))
+    return imgs
+
 def read_chessboard_imgs():
     imgs = []
     img_names = glob.glob('./chessboard/*.png')

@@ -4,6 +4,7 @@ from _thread import*
 
 import numpy as np
 import cv2
+import aruco_test
 # import pattern_manager
 import time
 
@@ -12,6 +13,7 @@ class camera_manager:
     def __init__(self):
         self.CAPTURE_INDEX = 0
         self.CAPTURE_FLAG = False
+        self.ARUCO_FLAG = False
 
         # self.CAM_SERIAL = 13142459
         self.CAM_SERIAL = 14193278
@@ -32,6 +34,9 @@ class camera_manager:
         if self.camera_instance is not None:
             self.camera_instance.disconnect()
         pass
+
+    def get_image(self):
+        return self.cv_image1
 
     def cam_thread(self, id):
         while self.THREAD_RUN == True:
@@ -59,7 +64,12 @@ class camera_manager:
             image_data1 = np.asarray(image1["buffer"], dtype=np.uint8)
             bayer_img = image_data1.reshape((image1["rows"], image1["cols"]));
             self.cv_image1 = cv2.cvtColor(bayer_img, cv2.COLOR_BayerGB2RGB)
+            aruco_img = None
+            if self.ARUCO_FLAG:
+                aruco_img = aruco_test.detect_aruco(self.cv_image1)
 
+            if aruco_img is not None:
+                com.lm.view_original_image(com.LABEL_TARGET, aruco_img, True)
             com.lm.view_original_image(com.LABEL_ORIGINAL, self.cv_image1, True)
 
         self.camera_instance.disconnect()

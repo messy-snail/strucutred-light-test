@@ -20,8 +20,8 @@ class pattern_manager:
     def start(self):
 
         gray_code_generator = cv2.structured_light.GrayCodePattern_create(com.PATTERN_WIDTH, com.PATTERN_HEIGHT)
-        _, self.patter_images = gray_code_generator.generate()
-        # self.patter_images = stripe_pattern.generate((com.PATTERN_WIDTH, com.PATTERN_HEIGHT), self.OPTION)
+        # _, self.patter_images = gray_code_generator.generate()
+        self.patter_images = stripe_pattern.generate((com.PATTERN_WIDTH, com.PATTERN_HEIGHT), self.OPTION)
 
         # _, self.patter_images = gray_code_generator.generate()
         # white black 뿌림

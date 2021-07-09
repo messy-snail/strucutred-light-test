@@ -10,6 +10,8 @@ img = board.draw((200*3,200*3))
 
 #Dump the calibration board to a file
 cv2.imwrite('charuco.png',img)
+cv2.imshow('charuco',img)
+cv2.waitKey(-1)
 
 
 # #Start capturing images for calibration
