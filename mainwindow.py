@@ -48,6 +48,7 @@ class MyWindow(QMainWindow, form_class):
         self.BTN_AUTO_CAPTURE.clicked.connect(self.btn_auto_capture_clicked)
         self.BTN_MANUAL_CAPTURE.clicked.connect(self.btn_manual_capture_clicked)
         self.BTN_EXTRACT_STRIPE.clicked.connect(self.btn_extract_stripe_clicked)
+        self.BTN_RECONSTRUCTION.clicked.connect(self.btn_reconstruction_clicked)
         self.BTN_EXIT.clicked.connect(self.btn_exit_clicked)
         self.BTN_PREV_IMAGE.clicked.connect(self.btn_prev_image_clicked)
         self.BTN_NEXT_IMAGE.clicked.connect(self.btn_next_image_clicked)
@@ -123,9 +124,17 @@ class MyWindow(QMainWindow, form_class):
         com.log.print_log('캡쳐되었습니다', self.TE_LOG)
 
     def btn_extract_stripe_clicked(self):
+        self.sls.PATTERN_WIDTH = com.PATTERN_WIDTH
+        self.sls.PATTERN_HEIGHT = com.PATTERN_HEIGHT
         self.sls.line_extarct()
         pass
 
+    def btn_reconstruction_clicked(self):
+        gray_code_generator = cv2.structured_light.GrayCodePattern_create(com.PATTERN_WIDTH, com.PATTERN_HEIGHT)
+        # gray_code_generator.decode()
+        # decoded = graycode->decode(captured_pattern, disparityMap, blackImages, whiteImages,
+        #                            structured_light::DECODE_3D_UNDERWORLD);
+        pass
     def btn_exit_clicked(self):
         self.close()
 
@@ -177,7 +186,7 @@ class MyWindow(QMainWindow, form_class):
         self.change_view()
 
     def btn_circle_pattern_clicked(self):
-        circle_pattern.generate(4, 5, radius = 20, offset= 80, margin_x=300, margin_y=300)
+        circle_pattern.generate(4, 5, radius = 20, offset= 60, margin_x=300, margin_y=300)
         pass
 
     def btn_test_clicked(self):

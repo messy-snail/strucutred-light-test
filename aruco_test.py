@@ -39,6 +39,14 @@ def detect_aruco(img_list):
     K = np.load('camera_matrix.npy')
     dist_coef = np.load('distortion.npy')
 
+    proj_circles_list= []
+    cam_circles_list = []
+    circles_3d_list = []
+
+    # circles_3d_list = np.zeros((5 * 4 * 8, 3), np.float32)
+
+    # img_idx =0
+    # num_total_imgs = len(img_list)
     for input in img_list:
 
         frame = copy.deepcopy(input)
@@ -51,18 +59,21 @@ def detect_aruco(img_list):
 
         corners, ids, rejected = cv2.aruco.detectMarkers(frame, cb.dictionary)
         if ids is None:
-            return None
+            continue
         corners, ids, rejected, recovered = cv2.aruco.refineDetectedMarkers(frame, cb, corners, ids, rejected, cameraMatrix=K, distCoeffs=dist_coef)
         # if corners == None or len(corners) == 0:`
         #     continue
         ret, charucoCorners, charucoIds = cv2.aruco.interpolateCornersCharuco(corners, ids, frame, cb)
 
+        if ret==False:
+            continue
         aruco.drawDetectedCornersCharuco(frame, charucoCorners, charucoIds, (0,255,0))
 
         valid, rvec, tvec = cv2.aruco.estimatePoseCharucoBoard(charucoCorners, charucoIds, cb, K, dist_coef, None, None)
         # // if charuco pose is valid
         if valid:
             aruco.drawAxis(frame, K, dist_coef, rvec, tvec, 25)
+
 
         circles_grid_size = (4, 5)
         for corner in corners:
@@ -74,17 +85,31 @@ def detect_aruco(img_list):
             print(e)
             return None
         if ret ==False:
-            return None
+            continue
+            # return None
+
+        cam_circles_list.append(circles)
         img = cv2.drawChessboardCorners(frame, circles_grid_size, circles, ret)
         # ray-plane intersection: circle-center to chessboard-plane
         circles3D = intersect_circles_rays2board(circles, rvec, tvec, K, dist_coef)
+
+
         if circles3D is None:
             return None
         # re-project on camera for verification
         circles3D_reprojected, _ = cv2.projectPoints(circles3D, (0, 0, 0), (0, 0, 0), K, dist_coef)
+        # circles3D_reprojected, _ = cv2.projectPoints(circles3D, rvec, tvec, K, dist_coef)
+
+
+        # for i in range(0, len(circles3D)):
+        #     circles_3d_list[i+img_idx*num_total_imgs] = circles_3d_list[i]
+        circles_3d_list.append(circles3D)
+        proj_circles_list.append(circles3D_reprojected.squeeze())
+
         for c in circles3D_reprojected:
             cv2.circle(img, tuple(c.astype(np.int32)[0]), 3, (255, 255, 0), cv2.FILLED)
 
+        # img_idx+=1
         print('pass')
     # # calibrate projector
     w_proj = 1280
@@ -102,35 +127,41 @@ def detect_aruco(img_list):
     #objectPointsAccum: 실제 원 크기
     #projCirclePoints 찾은 값
 
-    ret, K_proj, dist_coef_proj, rvecs, tvecs = cv2.calibrateCamera(objectPointsAccum,
-                                                                    projCirclePoints,
+    ret, K_proj, dist_coef_proj, rvecs, tvecs = cv2.calibrateCamera(np.array(circles_3d_list, np.float32),
+                                                                    np.array(proj_circles_list, np.float32),
                                                                     (w_proj, h_proj),
                                                                     K_proj,
                                                                     dist_coef_proj,
                                                                     flags=cv2.CALIB_USE_INTRINSIC_GUESS)
-    # print("proj calib mat after\n%s" % K_proj)
-    # print("proj dist_coef %s" % dist_coef_proj.T)
-    # print("calibration reproj err %s" % ret)
-    # print("stereo calibration")
-    # ret, K, dist_coef, K_proj, dist_coef_proj, proj_R, proj_T, _, _ = cv2.stereoCalibrate(
-    #     objectPointsAccum,
-    #     cameraCirclePoints,
-    #     projCirclePoints,
-    #     K,
-    #     dist_coef,
-    #     K_proj,
-    #     dist_coef_proj,
-    #     (w, h),
-    #     flags=cv2.CALIB_USE_INTRINSIC_GUESS
-    # )
-    # proj_rvec, _ = cv2.Rodrigues(proj_R)
-    # print("R \n%s" % proj_R)
-    # print("T %s" % proj_T.T)
-    # print("proj calib mat after\n%s" % K_proj)
-    # print("proj dist_coef %s" % dist_coef_proj.T)
-    # print("cam calib mat after\n%s" % K)
-    # print("cam dist_coef %s" % dist_coef.T)
-    # print("reproj err %f" % ret)
+
+
+    print("proj calib mat after\n%s" % K_proj)
+    print("proj dist_coef %s" % dist_coef_proj.T)
+    print("calibration reproj err %s" % ret)
+    print("stereo calibration")
+
+    w_cam = 1280
+    h_cam = 960
+
+    ret, K, dist_coef, K_proj, dist_coef_proj, proj_R, proj_T, _, _ = cv2.stereoCalibrate(
+        np.array(circles_3d_list, np.float32),
+        np.array(cam_circles_list, np.float32),
+        np.array(proj_circles_list, np.float32),
+        K,
+        dist_coef,
+        K_proj,
+        dist_coef_proj,
+        (w_cam, h_cam),
+        flags=cv2.CALIB_USE_INTRINSIC_GUESS
+    )
+    proj_rvec, _ = cv2.Rodrigues(proj_R)
+    print("R \n%s" % proj_R)
+    print("T %s" % proj_T.T)
+    print("proj calib mat after\n%s" % K_proj)
+    print("proj dist_coef %s" % dist_coef_proj.T)
+    print("cam calib mat after\n%s" % K)
+    print("cam dist_coef %s" % dist_coef.T)
+    print("reproj err %f" % ret)
 
     return img
 

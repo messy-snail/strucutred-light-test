@@ -1182,6 +1182,45 @@ color:gray;
           </property>
          </widget>
         </item>
+        <item row="8" column="2">
+         <widget class="QPushButton" name="BTN_RECONSTRUCTION">
+          <property name="minimumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>170</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
+background-color:rgb(37, 85, 158);
+
+
+border-radius:5px;
+font: bold 12pt &quot;Noto Sans KR&quot;;
+color:white;
+}
+QPushButton:hover{
+background-color:rgba(77, 125, 198,100);
+}
+QPushButton:pressed{
+background-color:rgba(77, 125, 198,150);
+}
+QPushButton:disabled{
+background-color:rgba(121, 106, 122,90);
+color:gray;
+}</string>
+          </property>
+          <property name="text">
+           <string>복원</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>

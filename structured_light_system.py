@@ -11,6 +11,8 @@ class structured_light_system:
         self.black_threshold = 20
         # self.black_threshold = 50
         self.white_threshold = 5
+        self.PATTERN_WIDTH = 0
+        self.PATTERN_HEIGHT = 0
 
     def line_extarct(self):
         left_imgs, right_imgs, white_imgs, black_imgs =com.read_captured_imgs()
@@ -20,6 +22,23 @@ class structured_light_system:
         cv2.imwrite('right_shadow_mask.png', right_shadow_mask)
 
         dec_img1, dec_img2 = self.__get_projection_pixel(left_imgs, left_shadow_mask)
+        # scale_x =1
+        # scale_y = 1 if (self.PATTERN_WIDTH>self.PATTERN_HEIGHT) else 2
+
+        proj_x = np.where((dec_img1>0) & (dec_img1<self.PATTERN_WIDTH) &(dec_img2>0) &(dec_img2<self.PATTERN_HEIGHT), dec_img1, 0)
+        proj_y = np.where((dec_img1 > 0) & (dec_img1 < self.PATTERN_WIDTH) & (dec_img2 > 0) & (dec_img2 < self.PATTERN_HEIGHT), dec_img2, 0)
+
+        cam_x = []
+        cam_y = []
+        for x in range(1, self.PATTERN_WIDTH):
+            cam_x.append(np.average(np.where(proj_x==x)[0]))
+            cam_y.append(np.average(np.where(proj_x==x)[1]) )
+
+            print(x)
+
+
+        # int scale_factor_x = 1;
+        #     int scale_factor_y = (projector_size.width>projector_size.height ? 1 : 2);
         print('berry_test')
 
     def __compute_shadow_mask(self, whites, blacks):
@@ -61,8 +80,6 @@ class structured_light_system:
             gray_for_viz_list.append(img2)
             gray_for_viz_color_list.append(color_img)
             gray_img_list.append(img)
-            if index==17:
-                print(index)
 
         number = 0
         for color in gray_for_viz_color_list:
@@ -74,6 +91,8 @@ class structured_light_system:
             number+=1
         dec_img1 = self.__gray_to_deciaml_num(gray_img_list[:col_imgs])
         dec_img2 = self.__gray_to_deciaml_num(gray_img_list[col_imgs:])
+
+
         return dec_img1, dec_img2
 
     def __gray_to_deciaml_num(self, gray_img_list):
@@ -83,13 +102,17 @@ class structured_light_system:
         tmp = gray_img_list[0]
 
         #처음에만
-        dec += np.where(gray_img_list[0]==255, 2**(time_size-1), 0)
+        dec += np.where(gray_img_list[0]==1, 2**(time_size-1), 0)
 
         for index in range(1, time_size):
-            tmp = tmp^gray_img_list[index]
+            tmp = np.where(tmp>=0, tmp^gray_img_list[index], tmp)
+            # tmp = tmp^gray_img_list[index]
             dec += np.where(tmp == 1, 2 ** (time_size - index - 1), 0)
 
         normzalied_dec = cv2.normalize(dec, None, 255, 0, cv2.NORM_MINMAX, cv2.CV_8UC1)
         color_dec = cv2.applyColorMap(normzalied_dec, cv2.COLORMAP_JET)
 
         return dec
+
+    def decode(self):
+        pass
