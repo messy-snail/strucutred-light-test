@@ -6,8 +6,8 @@ import label_manager
 import pattern_manager
 
 
-PATTERN_WIDTH = 640
-PATTERN_HEIGHT = 480
+PATTERN_WIDTH = 1024
+PATTERN_HEIGHT = 768
 
 log = log_manager.log_manager()
 lm = label_manager.label_manager()

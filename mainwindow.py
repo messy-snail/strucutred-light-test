@@ -37,7 +37,7 @@ class MyWindow(QMainWindow, form_class):
 
         self.cm = camera_manager.camera_manager()
         self.sls = structured_light_system.structured_light_system()
-
+        self.sls.read_parameter('calibration.yml')
         self.total_imgs = []
         self.current_index = 0
         self.total_index = 0
@@ -78,6 +78,9 @@ class MyWindow(QMainWindow, form_class):
         self.shortcutQuit.setContext(Qt.ApplicationShortcut)
         self.shortcutQuit.activated.connect(self.close)
 
+        self.LE_PATTERN_WIDTH.setText(str(com.PATTERN_WIDTH))
+        self.LE_PATTERN_HEIGHT.setText(str(com.PATTERN_HEIGHT))
+
         self.btn_cam_oepn_clicked()
         # self.toggle_full_screen()
 
@@ -102,6 +105,7 @@ class MyWindow(QMainWindow, form_class):
     def btn_generate_pattern_clicked(self):
         com.PATTERN_WIDTH =  int(self.LE_PATTERN_WIDTH.text())
         com.PATTERN_HEIGHT =  int(self.LE_PATTERN_HEIGHT.text())
+
         com.log.print_log(f'가로: {com.PATTERN_WIDTH}, 세로: {com.PATTERN_HEIGHT}의 패턴을 생성합니다', com.TE_LOG)
         com.pm.start()
 
